@@ -2,3 +2,5 @@
 function doGet() {
   return ContentService.createTextOutput('Hello, world!');
 }
+
+global.doGet = doGet;
