@@ -14,5 +14,8 @@
     "template"
   ],
   "author": "Jungle",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "node-google-apps-script": "^1.1.5"
+  }
 }
