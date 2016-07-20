@@ -15,5 +15,7 @@
   ],
   "author": "Jungle",
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "rollup": "^0.34.1"
+  }
 }
