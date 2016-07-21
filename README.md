@@ -14,3 +14,11 @@ To build project run:
 ```bash
 npm run build
 ```
+To deploy project run:
+```bash
+npm run deploy
+```
+or run:
+```bash
+gapps upload
+```
