@@ -8,6 +8,7 @@ npm install -g node-google-apps-script
 3. ```bash
 npm install .
 ``` install deps
+4. change `gapps.config.json` fileId
 
 ## Usage
 To build project run:
