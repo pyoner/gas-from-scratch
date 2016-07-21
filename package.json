@@ -23,5 +23,7 @@
     "rollup-plugin-commonjs": "^3.3.0",
     "rollup-plugin-node-resolve": "^1.7.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "object-assign-polyfill": "^0.1.0"
+  }
 }

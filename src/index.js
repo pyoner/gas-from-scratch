@@ -1,5 +1,4 @@
+import 'object-assign-polyfill';
 import * as app from './app';
 
-for (let k in app) {
-    global[k] = app[k];
-}
+Object.assign(global, app);
