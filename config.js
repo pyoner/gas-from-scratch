@@ -6,6 +6,7 @@ export default {
   entry: 'src/index.js',
   dest: 'dist/bundle.js',
   format: 'iife',
+  banner: 'var global = this;',
   plugins: [ 
       buble(),
       nodeResolve({
