@@ -1,6 +1,5 @@
-//put your main code here
-function doGet() {
-  return ContentService.createTextOutput('Hello, world!');
-}
+import * as app from './app';
 
-global.doGet = doGet;
+for (let k in app) {
+    global[k] = app[k];
+}
