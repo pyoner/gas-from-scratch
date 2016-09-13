@@ -4,7 +4,8 @@ var RemoveWebpackPlugin = require('remove-webpack-plugin');
 var Bump = require("bump-webpack-plugin");
 
 
-var BUILD_DIR = path.join(__dirname, './build');
+var SRC_DIR = path.join(__dirname, 'src');
+var BUILD_DIR = path.join(__dirname, 'build');
 
 var config = {
     entry: {
@@ -19,16 +20,21 @@ var config = {
     },
     module: {
         loaders: [{
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-            include: path.join(__dirname, 'src'),
-            query: {
-                presets: [
-                    'es2015',
-                    'stage-1',
-                ]
+                test: /\.json$/,
+                loader: 'json',
+            },
+            {
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                include: SRC_DIR,
+                query: {
+                    presets: [
+                        'es2015',
+                        'stage-1',
+                    ]
+                }
             }
-        }]
+        ]
     },
     plugins: [
         new RemoveWebpackPlugin([BUILD_DIR]),

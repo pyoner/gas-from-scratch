@@ -1,3 +1,5 @@
+import pack from '../package.json';
+
 export function doGet(e) {
-  return ContentService.createTextOutput('Hello, world!');
+    return ContentService.createTextOutput(`Ver.: ${pack.version}\nHello, world!`);
 }
