@@ -2,14 +2,14 @@ let items = [];
 
 function scheduler() {
     while (items.length) {
-        let [id, time, cb] = items.shift();
+        let [id, time, cb, args] = items.shift();
         let delta = time - Date.now();
         if (delta > 0) {
             Utilities.sleep(delta);
         }
 
         try {
-            cb()
+            cb(...args);
         } catch (e) {
             console.error(e);
         }
@@ -20,10 +20,10 @@ export function initScheduler(g = global) {
     Object.assign(g, { setTimeout, clearTimeout });
 }
 
-export function setTimeout(cb, ms) {
+export function setTimeout(cb, ms, ...args) {
     let id = parseInt(Math.random().toString().slice(2));
     let t = Date.now() + ms;
-    let item = [id, t, cb];
+    let item = [id, t, cb, args];
 
     for (let i = 0; i < items.length; i++) {
         let time = items[i][1];
