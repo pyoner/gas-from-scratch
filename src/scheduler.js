@@ -16,6 +16,10 @@ function scheduler() {
     }
 }
 
+export function initScheduler(g = global) {
+    Object.assign(g, { setTimeout, clearTimeout });
+}
+
 export function setTimeout(cb, ms) {
     let id = parseInt(Math.random().toString().slice(2));
     let t = Date.now() + ms;
