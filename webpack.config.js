@@ -8,7 +8,7 @@ var BUILD_DIR = path.join(__dirname, './build');
 
 var config = {
     entry: {
-        index: './src/index.js',
+        index: ['babel-polyfill', './src/index.js'],
     },
     output: {
         filename: '[name].js',
