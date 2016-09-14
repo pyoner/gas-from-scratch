@@ -9,7 +9,9 @@ var BUILD_DIR = path.join(__dirname, 'build');
 
 var config = {
     entry: {
-        index: ['babel-polyfill', './src/index.js'],
+        index: [
+            './src/index.js'
+        ],
     },
     output: {
         filename: '[name].js',
@@ -31,6 +33,9 @@ var config = {
                     presets: [
                         'es2015',
                         'stage-1',
+                    ],
+                    plugins: [
+                        'transform-runtime',
                     ]
                 }
             }
