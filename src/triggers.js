@@ -40,11 +40,9 @@ export function wrapTrigger(name, cb) {
 }
 
 export function initApp(app, g = global) {
-    for (let k in TRIGGER_FUNC_NAMES) {
+    for (let k in app) {
         let func = app[k];
-        if (func) {
-            let name = TRIGGER_FUNC_NAMES[k];
-            g[k] = wrapTrigger(name, func);
-        }
+        let name = TRIGGER_FUNC_NAMES[k];
+        g[k] = name ? wrapTrigger(name, func) : func;
     }
 }
