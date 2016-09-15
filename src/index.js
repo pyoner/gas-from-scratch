@@ -1,5 +1,6 @@
-import { initScheduler, wrapTrigger } from './scheduler';
+import { initApp } from './triggers';
+import { initScheduler } from './scheduler';
 import * as app from './app';
 
 initScheduler(global);
-Object.assign(global, app);
+initApp(app, global);

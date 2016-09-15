@@ -1,3 +1,6 @@
+import { emitter } from './triggers';
+
+let inited = false;
 let items = [];
 
 function scheduler() {
@@ -17,7 +20,13 @@ function scheduler() {
 }
 
 export function initScheduler(g = global) {
+    if (inited) {
+        return
+    }
     Object.assign(g, { setTimeout, clearTimeout });
+    emitter.on('afterGet', scheduler);
+    emitter.on('afterPost', scheduler);
+    inited = true;
 }
 
 export function setTimeout(cb, ms, ...args) {
@@ -43,18 +52,6 @@ export function clearTimeout(id) {
         if (itemId == id) {
             items.splice(i, 1);
             break;
-        }
-    }
-}
-
-export function wrapTrigger(cb) {
-    return function(...args) {
-        try {
-            return cb(...args);
-        } catch (e) {
-            console.error(e);
-        } finally {
-            scheduler();
         }
     }
 }
