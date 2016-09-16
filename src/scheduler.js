@@ -22,7 +22,7 @@ export function schedulerMiddleware(g = global) {
     return (next) => (event) => {
         let result = next(event);
         scheduler();
-        return result;
+        return result.valueOf ? result.valueOf() : result;
     }
 }
 
