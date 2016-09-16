@@ -36,6 +36,7 @@ var config = {
                     ],
                     plugins: [
                         'transform-runtime',
+                        'closure-elimination',
                     ]
                 }
             }
