@@ -1,6 +1,8 @@
 import { initApp } from './triggers';
-import { initScheduler } from './scheduler';
+import { schedulerMiddleware } from './scheduler';
 import * as app from './app';
 
-initScheduler(global);
-initApp(app, global);
+let middlewares = [
+    schedulerMiddleware(global),
+];
+initApp(app, middlewares, global);

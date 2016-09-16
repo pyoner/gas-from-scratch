@@ -1,6 +1,3 @@
-import { emitter } from './triggers';
-
-let inited = false;
 let items = [];
 
 function scheduler() {
@@ -19,14 +16,14 @@ function scheduler() {
     }
 }
 
-export function initScheduler(g = global) {
-    if (inited) {
-        return
-    }
+export function schedulerMiddleware(g = global) {
     Object.assign(g, { setTimeout, clearTimeout });
-    emitter.on('afterGet', scheduler);
-    emitter.on('afterPost', scheduler);
-    inited = true;
+
+    return (next) => (event) => {
+        let result = next(event);
+        scheduler();
+        return result;
+    }
 }
 
 export function setTimeout(cb, ms, ...args) {

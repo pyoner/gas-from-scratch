@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import { comp, identity } from 'transducers-js';
 
 let wrapped = []
 
@@ -21,7 +22,7 @@ export const TRIGGER_NAMES = [
 class TriggerEmitter extends EventEmitter {}
 export const emitter = new TriggerEmitter();
 
-export function wrapTrigger(name, cb) {
+function triggerMiddelware(name, cb) {
     if (TRIGGER_NAMES.indexOf(name) == -1) {
         throw new Error(`Invalid trigger name "${name}" not in ${TRIGGER_NAMES}`);
     }
@@ -31,18 +32,18 @@ export function wrapTrigger(name, cb) {
     }
     wrapped.push(name);
 
-    return function(event) {
+    return (next) => (event) => {
         emitter.emit(`before${name}`, event);
         let result = cb(event);
         emitter.emit(`after${name}`, event);
-        return result;
+        return next(result);
     }
 }
 
-export function initApp(app, g = global) {
+export function initApp(app, middlewares = [], g = global) {
     for (let k in app) {
         let func = app[k];
         let name = TRIGGER_FUNC_NAMES[k];
-        g[k] = name ? wrapTrigger(name, func) : func;
+        g[k] = name ? comp(...middlewares, triggerMiddelware(name, func))(identity) : func;
     }
 }
