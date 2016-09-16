@@ -45,6 +45,8 @@ var config = {
     plugins: [
         new RemoveWebpackPlugin([BUILD_DIR]),
         new Bump(['package.json']),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.OccurrenceOrderPlugin(),
     ]
 }
 if (process.env.NODE_ENV == 'production') {
