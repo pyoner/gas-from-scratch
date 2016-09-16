@@ -1,8 +1,6 @@
 import EventEmitter from 'events';
 import { comp, identity } from 'transducers-js';
 
-let wrapped = []
-
 export const TRIGGER_FUNC_NAMES = {
     onOpen: 'Open',
     onEdit: 'Edit',
@@ -11,27 +9,10 @@ export const TRIGGER_FUNC_NAMES = {
     doPost: 'Post',
 }
 
-export const TRIGGER_NAMES = [
-    'Open',
-    'Edit',
-    'Install',
-    'Get',
-    'Post',
-];
-
 class TriggerEmitter extends EventEmitter {}
 export const emitter = new TriggerEmitter();
 
 function triggerMiddelware(name, cb) {
-    if (TRIGGER_NAMES.indexOf(name) == -1) {
-        throw new Error(`Invalid trigger name "${name}" not in ${TRIGGER_NAMES}`);
-    }
-
-    if (name in wrapped) {
-        throw new Error(`Trigger "${name}" already wrapped`);
-    }
-    wrapped.push(name);
-
     return (next) => (event) => {
         emitter.emit(`before${name}`, event);
         let result = cb(event);
