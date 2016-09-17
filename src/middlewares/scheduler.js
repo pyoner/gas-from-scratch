@@ -19,7 +19,7 @@ function scheduler() {
 export function schedulerMiddleware(g = global) {
     Object.assign(g, { setTimeout, clearTimeout });
 
-    return (next) => (event) => {
+    return (type) => (next) => (event) => {
         let result = next(event);
         scheduler();
         return result.valueOf ? result.valueOf() : result;

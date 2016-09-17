@@ -1,4 +1,4 @@
-export default function promiseMiddleware() {
+export default function promiseMiddleware(type) {
     return (next) => (event) => {
         let result = next(event);
         if (result instanceof Promise) {

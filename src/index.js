@@ -1,10 +1,12 @@
-import { initApp } from './triggers';
+import { initApp } from './core';
+import { schedulerMiddleware } from './middlewares/scheduler';
 import promiseMiddleware from './middlewares/promise';
-import { schedulerMiddleware } from './scheduler';
+import { triggerMiddleware } from './middlewares/trigger';
 import * as app from './app';
 
 let middlewares = [
     schedulerMiddleware(global),
-    promiseMiddleware(),
+    promiseMiddleware,
+    triggerMiddleware,
 ];
 initApp(app, middlewares, global);
