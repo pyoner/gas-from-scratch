@@ -11,7 +11,7 @@ export const EVENT_PREFIX = {
 class TriggerEmitter extends EventEmitter {}
 export const emitter = new TriggerEmitter();
 
-export function triggerMiddelware(type) {
+export function triggerMiddleware(type) {
     return (next) => (event) => {
         let name = EVENT_PREFIX[type];
         emitter.emit(`before${name}`, event);
