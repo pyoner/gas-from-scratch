@@ -5,6 +5,7 @@ var Bump = require("bump-webpack-plugin");
 
 
 var SRC_DIR = path.join(__dirname, 'src');
+var TEST_DIR = path.join(__dirname, 'tests');
 var BUILD_DIR = path.join(__dirname, 'build');
 
 var config = {
@@ -28,7 +29,7 @@ var config = {
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
-                include: SRC_DIR,
+                include: [SRC_DIR, TEST_DIR],
                 query: {
                     presets: [
                         'es2015',
@@ -47,7 +48,10 @@ var config = {
         new Bump(['package.json']),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
-    ]
+    ],
+    node: {
+        fs: 'empty',
+    }
 }
 if (process.env.NODE_ENV == 'production') {
     config.plugins = config.plugins.concat([
