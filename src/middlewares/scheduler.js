@@ -1,3 +1,4 @@
+Object.assign(global, { setTimeout, clearTimeout });
 let items = [];
 
 function scheduler() {
@@ -16,10 +17,8 @@ function scheduler() {
     }
 }
 
-export function schedulerMiddleware(g = global) {
-    Object.assign(g, { setTimeout, clearTimeout });
-
-    return (type) => (next) => (event) => {
+export function schedulerMiddleware(type) {
+    return (next) => (event) => {
         let result = next(event);
         scheduler();
         return result.valueOf ? result.valueOf() : result;
