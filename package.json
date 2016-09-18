@@ -1,6 +1,6 @@
 {
   "name": "gas-from-scratch",
-  "version": "0.1.48",
+  "version": "0.1.59",
   "description": "Google Apps Script from scratch",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "bump-webpack-plugin": "^0.1.0",
     "json-loader": "^0.5.4",
     "remove-webpack-plugin": "^1.1.1",
+    "tape": "^4.6.0",
     "webpack": "^1.13.2"
   },
   "dependencies": {
