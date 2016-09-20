@@ -11,17 +11,37 @@ function scheduler() {
 
         try {
             cb(...args);
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            process.emit('uncaughtException', err);
         }
     }
 }
 
 export function schedulerMiddleware(type) {
     return (next) => (event) => {
-        let result = next(event);
-        scheduler();
-        return result.valueOf ? result.valueOf() : result;
+        let result;
+        try {
+            result = next(event);
+        } catch (err) {
+            process.emit('uncaughtException', err);
+        } finally {
+            try {
+                let runned = false;
+                while (!runned || items.length) {
+                    runned = true;
+                    scheduler();
+                    process.emit('beforeExit');
+                }
+                process.emit('exit');
+            } catch (err) {
+                try {
+                    process.emit('uncaughtException', err);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+            return result.valueOf ? result.valueOf() : result;
+        }
     }
 }
 
