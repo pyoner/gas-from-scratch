@@ -1,50 +1,38 @@
-import {
-    JSONCache
-} from './json_cache';
-
-export class CacheStream {
-    constructor(opts) {
-        this._opts = Object.assign({}, opts);
-        this._cache = new JSONCache(CacheService.getScriptCache());
-    }
-
-    write(data) {
-        let expiration = this._opts.expiration;
-        let put = this._cache.put.bind(this._cache, this._opts.key, data);
-        if (expiration) {
-            put(expiration);
-        } else {
-            put();
-        }
-    }
-
-    read() {
-        let data = this._cache.get(this._opts.key)
-    }
-}
+import { format } from 'util';
 
 export class Console {
     constructor(stdout, stderr = null) {
         this._stdout = stdout;
-        this._stderr = stderr;
+        this._stderr = stderr || stdout;
     }
 
-    _format(type, args) {
+    _format(type, args, asString = false) {
         let data = {
             type,
             date: Date.now(),
-            message: args
+            message: asString ? format(...args) : args
         }
-        return JSON.stringify(data);
+
+        return asString ? `${data.date}\t[${data.type}]\t${data.message}` : data;
+    }
+
+    _write(type, args, stream = this._stdout) {
+        stream.write(this._format(type, args, !stream.objectMode));
     }
 
     log(...args) {
-        this._stdout.write(this._format('log', args));
+        this._write('log', args);
+    }
+
+    info(...args) {
+        this._write('info', args);
+    }
+
+    error(...args) {
+        this._write('error', args, this._stderr);
+    }
+
+    warn(...args) {
+        this._write('warn', args, this._stderr);
     }
 }
-
-let stdout = new CacheStream({
-    key: '_console'
-});
-export default
-let console = new Console(stdout);
