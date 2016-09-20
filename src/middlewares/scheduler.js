@@ -1,3 +1,5 @@
+import { isFunction } from 'util';
+
 Object.assign(global, { setTimeout, clearTimeout });
 let items = [];
 
@@ -37,7 +39,9 @@ export function schedulerMiddleware(type) {
                 try {
                     process.emit('uncaughtException', err);
                 } catch (err) {
-                    console.error(err);
+                    if (console && console.error && isFunction(console.error)) {
+                        console.error(err);
+                    }
                 }
             }
             return result.valueOf ? result.valueOf() : result;
