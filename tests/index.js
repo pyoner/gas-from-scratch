@@ -16,9 +16,12 @@ export function doGet(event) {
         t.end();
     });
 
-    //return ContentService.createTextOutput('test handler');
-    //return new Promise((resolve, reject) => {
-    //setTimeout(resolve, 1000, ContentService.createTextOutput('test promise'));
-    //})
+    test('process beforeExit', (t)=>{
+        process.once('beforeExit', ()=>{
+            t.comment('beforeExit handler');
+            t.end();
+        });
+    })
+
     return p;
 }
