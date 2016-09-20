@@ -1,3 +1,4 @@
+import monkeyProcess from './monkeys/process'; // monkey patch for process events
 import { initApp } from './core';
 import { schedulerMiddleware } from './middlewares/scheduler';
 import promiseMiddleware from './middlewares/promise';
