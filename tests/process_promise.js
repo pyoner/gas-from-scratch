@@ -19,10 +19,10 @@ test('process beforeExit', (t) => {
 })
 
 test('process exit', (t) => {
-	process.once('exit', () => {
-		t.comment('exit handler');
-		t.end();
-	});
+    process.once('exit', () => {
+        t.comment('exit handler');
+        t.end();
+    });
 })
 
 p.then(console.log.bind(console));
