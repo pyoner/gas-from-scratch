@@ -3,7 +3,6 @@ var webpack = require('webpack');
 var RemoveWebpackPlugin = require('remove-webpack-plugin');
 var Bump = require("bump-webpack-plugin");
 var PathChunkPlugin = require('path-chunk-webpack-plugin');
-var es3ifyPlugin = require('es3ify-webpack-plugin');
 
 
 var SRC_DIR = path.join(__dirname, 'src');
@@ -53,7 +52,6 @@ var config = {
         new webpack.BannerPlugin('this.window = this;', { raw: true }),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new es3ifyPlugin(),
         new PathChunkPlugin({
             name: 'libs',
             test: 'node_modules/'
@@ -69,6 +67,10 @@ if (process.env.NODE_ENV == 'production') {
             'process.env': { 'NODE_ENV': JSON.stringify('production') }
         }),
         new webpack.optimize.UglifyJsPlugin({ compress: { warnings: true } })
+    ])
+} else {
+    config.plugins = config.plugins.concat([
+        new webpack.optimize.UglifyJsPlugin({ beautify: true })
     ])
 }
 
