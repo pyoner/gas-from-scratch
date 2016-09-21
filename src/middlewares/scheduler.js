@@ -1,4 +1,4 @@
-import { isFunction } from 'util';
+import { isFunction, isNullOrUndefined } from 'util';
 
 Object.assign(global, { setTimeout, clearTimeout });
 let items = [];
@@ -44,7 +44,13 @@ export function schedulerMiddleware(type) {
                     }
                 }
             }
-            return result.valueOf ? result.valueOf() : result;
+            if (process.stdout) {
+                process.stdout.end();
+            }
+            if (process.stderr && process.stderr !== process.stdout) {
+                process.stderr.end();
+            }
+            return isNullOrUndefined(result) ? ContentService.createTextOutput(process._stdout) : (result.valueOf ? result.valueOf() : result);
         }
     }
 }
