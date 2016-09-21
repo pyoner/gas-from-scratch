@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var RemoveWebpackPlugin = require('remove-webpack-plugin');
 var Bump = require("bump-webpack-plugin");
+var PathChunkPlugin = require('path-chunk-webpack-plugin');
 
 
 var SRC_DIR = path.join(__dirname, 'src');
@@ -10,13 +11,14 @@ var BUILD_DIR = path.join(__dirname, 'build');
 
 var config = {
     entry: {
-        index: [
+        webapp: [
             './src/index.js'
         ],
     },
     output: {
-        filename: '[name].js',
         path: BUILD_DIR,
+        filename: '[name]-[chunkhash].js',
+        chunkFilename: '[name]-[chunkhash].js'
     },
     resolveLoader: {
         root: path.join(__dirname, 'node_modules'),
@@ -46,8 +48,13 @@ var config = {
     plugins: [
         new RemoveWebpackPlugin([BUILD_DIR]),
         new Bump(['package.json']),
+        new webpack.BannerPlugin('this.window = this;', { raw: true }),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
+        new PathChunkPlugin({
+            name: 'libs',
+            test: 'node_modules/'
+        }),
     ],
     node: {
         fs: 'empty',
