@@ -3,11 +3,13 @@ var webpack = require('webpack');
 var RemoveWebpackPlugin = require('remove-webpack-plugin');
 var Bump = require("bump-webpack-plugin");
 var PathChunkPlugin = require('path-chunk-webpack-plugin');
+var es3ifyPlugin = require('es3ify-webpack-plugin');
 
 
 var SRC_DIR = path.join(__dirname, 'src');
 var TEST_DIR = path.join(__dirname, 'tests');
 var BUILD_DIR = path.join(__dirname, 'build');
+var NODE_DIR = path.join(__dirname, 'node_modules');
 
 var config = {
     entry: {
@@ -21,7 +23,7 @@ var config = {
         chunkFilename: '[name]-[chunkhash].js'
     },
     resolveLoader: {
-        root: path.join(__dirname, 'node_modules'),
+        root: NODE_DIR,
     },
     module: {
         loaders: [{
@@ -51,6 +53,7 @@ var config = {
         new webpack.BannerPlugin('this.window = this;', { raw: true }),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
+        new es3ifyPlugin(),
         new PathChunkPlugin({
             name: 'libs',
             test: 'node_modules/'
