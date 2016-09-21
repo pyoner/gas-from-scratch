@@ -1,9 +1,10 @@
 import { format } from 'util';
 
 export class Console {
-    constructor(stdout, stderr = null) {
+    constructor(stdout, stderr = null, opts = { forceString: false }) {
         this._stdout = stdout;
         this._stderr = stderr || stdout;
+        this.opts = opts;
     }
 
     _format(type, args, asString = false) {
@@ -13,11 +14,11 @@ export class Console {
             message: asString ? format(...args) : args
         }
 
-        return asString ? `${data.date}\t[${data.type}]\t${data.message}` : data;
+        return asString ? `${data.date}\t[${data.type}]\t${data.message}\n` : data;
     }
 
     _write(type, args, stream = this._stdout) {
-        stream.write(this._format(type, args, !stream.objectMode));
+        stream.write(this._format(type, args, this.opts.forceString || !stream.objectMode));
     }
 
     log(...args) {
@@ -37,6 +38,6 @@ export class Console {
     }
 }
 
-const console = new Console(process.stdout, process.stderr);
+const console = new Console(process.stdout, process.stderr, { forceString: true });
 global.console = console;
 export default console;
