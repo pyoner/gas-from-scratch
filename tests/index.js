@@ -2,15 +2,6 @@ import test from 'tape';
 
 export function doGet(event) {
     console.log('Test');
-    //let s = '';
-    //test.createStream()
-        //.on('data', (value) => { s += value });
-
-    //let p = new Promise((resolve, reject) => {
-        //test.onFinish(() => {
-            //resolve(ContentService.createTextOutput(s));
-        //});
-    //});
 
     test('test 1', (t) => {
         t.equal(1, 1);
@@ -28,12 +19,4 @@ export function doGet(event) {
             t.end();
         });
     })
-
-    //test('process exit', (t)=>{
-    //process.once('exit', ()=>{
-    //t.comment('exit handler');
-    //t.end();
-    //});
-    //})
-    //return p;
 }
