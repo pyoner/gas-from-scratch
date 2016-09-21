@@ -30,4 +30,5 @@ function flush(key, data) {
     value = value.slice(-CACHE_SIZE)
     cache.put(key, value);
 }
-process.stderr = process.stdout = concat({ encoding: 'string' }, (data)=>flush('_stdout', data));
+process.stderr = concat({ encoding: 'string' }, (data)=>flush('_stderr', data));
+process.stdout = concat({ encoding: 'string' }, (data)=>flush('_stdout', data));
