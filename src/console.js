@@ -36,3 +36,7 @@ export class Console {
         this._write('warn', args, this._stderr);
     }
 }
+
+const console = new Console(process.stdout, process.stderr);
+global.console = console;
+export default console;
