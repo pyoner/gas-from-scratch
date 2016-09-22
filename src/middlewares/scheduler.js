@@ -42,6 +42,10 @@ function returnLog() {
     return ContentService.createTextOutput(process._stdout + process._stderr);
 }
 
+function valueOf(obj) {
+    return isFunction(obj.valueOf) ? obj.valueOf() : obj;
+}
+
 export function schedulerMiddleware(type) {
     return (next) => (event) => {
         let result;
@@ -67,7 +71,7 @@ export function schedulerMiddleware(type) {
             if (process.stderr && process.stderr !== process.stdout) {
                 process.stderr.end();
             }
-            return isNullOrUndefined(result) || isUncaughtException ? returnLog() : (result.valueOf ? result.valueOf() : result);
+            return isNullOrUndefined(result) || isUncaughtException ? returnLog() : valueOf(result);
         }
     }
 }
