@@ -1,5 +1,4 @@
 import { schedulerMiddleware } from './middlewares/scheduler';
-import console from './console';
 import promiseMiddleware from './middlewares/promise';
 import { triggerMiddleware } from './middlewares/triggers';
 import testMiddleware from './middlewares/test';

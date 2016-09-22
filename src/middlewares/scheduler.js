@@ -1,4 +1,5 @@
 import process from '../monkeys/process'; // monkey patch for process events
+import console from '../console';
 import { isFunction, isNullOrUndefined } from 'util';
 
 Object.assign(global, { setTimeout, clearTimeout });
@@ -23,18 +24,19 @@ function scheduler() {
 let isUncaughtException = false;
 
 function logUncaughtException(err) {
-    isUncaughtException = true;
-    logError(err);
-    try {
-        process.emit('uncaughtException', err);
-    } catch (e) {
-        logError(e);
-    }
-}
-
-function logError(err) {
-    if (console && isFunction(console.error)) {
+    let count = process.listenerCount('uncaughtException');
+    if (count) {
+        try {
+            process.emit('uncaughtException', err);
+        } catch (e) {
+            isUncaughtException = true;
+            console.error(e);
+            process.exit(1);
+        }
+    } else {
+        isUncaughtException = true;
         console.error(err);
+        process.exit(7);
     }
 }
 
@@ -54,22 +56,18 @@ export function schedulerMiddleware(type) {
         } catch (err) {
             logUncaughtException(err);
         } finally {
-            try {
-                let runned = false;
-                while (!runned || items.length) {
-                    runned = true;
-                    scheduler();
-                    process.emit('beforeExit');
+            if (!isUncaughtException) {
+                try {
+                    let runned = false;
+                    while (!runned || items.length) {
+                        runned = true;
+                        scheduler();
+                        process.emit('beforeExit');
+                    }
+                    process.exit(0);
+                } catch (err) {
+                    logUncaughtException(err);
                 }
-                process.emit('exit');
-            } catch (err) {
-                logUncaughtException(err);
-            }
-            if (process.stdout) {
-                process.stdout.end();
-            }
-            if (process.stderr && process.stderr !== process.stdout) {
-                process.stderr.end();
             }
             return isNullOrUndefined(result) || isUncaughtException ? returnLog() : valueOf(result);
         }

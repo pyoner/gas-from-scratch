@@ -30,7 +30,17 @@ function flush(key, data) {
     value = value.slice(-CACHE_SIZE)
     cache.put(key, value);
 }
-process.stderr = concat({ encoding: 'string' }, (data)=>flush('_stderr', data));
-process.stdout = concat({ encoding: 'string' }, (data)=>flush('_stdout', data));
+process.stderr = concat({ encoding: 'string' }, (data) => flush('_stderr', data));
+process.stdout = concat({ encoding: 'string' }, (data) => flush('_stdout', data));
 
+process.exit = (code = 0) => {
+    process.exitCode = code;
+    try {
+        process.emit('exit', code);
+    } catch (err) {
+        console.error(err);
+    }
+    process.stdout.end();
+    process.stderr.end();
+}
 export default process;
