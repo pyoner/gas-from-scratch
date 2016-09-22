@@ -1,3 +1,4 @@
+import process from '../monkeys/process'; // monkey patch for process events
 import { isFunction, isNullOrUndefined } from 'util';
 
 Object.assign(global, { setTimeout, clearTimeout });
