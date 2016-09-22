@@ -32,3 +32,5 @@ function flush(key, data) {
 }
 process.stderr = concat({ encoding: 'string' }, (data)=>flush('_stderr', data));
 process.stdout = concat({ encoding: 'string' }, (data)=>flush('_stdout', data));
+
+export default process;
