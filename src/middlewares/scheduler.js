@@ -19,13 +19,35 @@ function scheduler() {
     }
 }
 
+let isUncaughtException = false;
+
+function logUncaughtException(err) {
+    isUncaughtException = true;
+    logError(err);
+    try {
+        process.emit('uncaughtException', err);
+    } catch (e) {
+        logError(e);
+    }
+}
+
+function logError(err) {
+    if (console && console.error && isFunction(console.error)) {
+        console.error(err);
+    }
+}
+
+function returnLog() {
+    return ContentService.createTextOutput(process._stdout + process._stderr);
+}
+
 export function schedulerMiddleware(type) {
     return (next) => (event) => {
         let result;
         try {
             result = next(event);
         } catch (err) {
-            process.emit('uncaughtException', err);
+            logUncaughtException(err);
         } finally {
             try {
                 let runned = false;
@@ -36,13 +58,7 @@ export function schedulerMiddleware(type) {
                 }
                 process.emit('exit');
             } catch (err) {
-                try {
-                    process.emit('uncaughtException', err);
-                } catch (err) {
-                    if (console && console.error && isFunction(console.error)) {
-                        console.error(err);
-                    }
-                }
+                logUncaughtException(err);
             }
             if (process.stdout) {
                 process.stdout.end();
@@ -50,7 +66,7 @@ export function schedulerMiddleware(type) {
             if (process.stderr && process.stderr !== process.stdout) {
                 process.stderr.end();
             }
-            return isNullOrUndefined(result) ? ContentService.createTextOutput(process._stdout) : (result.valueOf ? result.valueOf() : result);
+            return isNullOrUndefined(result) || isUncaughtException ? returnLog() : (result.valueOf ? result.valueOf() : result);
         }
     }
 }
