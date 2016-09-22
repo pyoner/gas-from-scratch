@@ -33,7 +33,7 @@ function logUncaughtException(err) {
 }
 
 function logError(err) {
-    if (console && console.error && isFunction(console.error)) {
+    if (console && isFunction(console.error)) {
         console.error(err);
     }
 }
