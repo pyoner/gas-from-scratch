@@ -12,12 +12,7 @@ function scheduler() {
         if (delta > 0) {
             Utilities.sleep(delta);
         }
-
-        try {
-            cb(...args);
-        } catch (err) {
-            process.emit('uncaughtException', err);
-        }
+        cb(...args);
     }
 }
 
