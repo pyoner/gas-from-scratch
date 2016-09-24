@@ -38,6 +38,6 @@ export class Console {
     }
 }
 
-const console = new Console(process.stdout, process.stderr, { forceString: true });
+const console = new Console(process.stdout, process.stderr);
 global.console = console;
 export default console;

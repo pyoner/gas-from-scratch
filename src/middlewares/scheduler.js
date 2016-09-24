@@ -36,7 +36,7 @@ function logUncaughtException(err) {
 }
 
 function returnLog() {
-    return ContentService.createTextOutput(process._stdout + process._stderr);
+    return ContentService.createTextOutput(process._log);
 }
 
 function valueOf(obj) {

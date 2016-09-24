@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import concat from 'concat-stream';
+import { Writable } from 'stream';
 
 const funcs = [
     'addListener',
@@ -21,17 +21,30 @@ for (let i = 0; i < funcs.length; i++) {
 }
 
 // stdout/stderr
+const CACHE_KEY = '_log';
 const CACHE_SIZE = 100 * 1024;
 
-function flush(key, data) {
-    process[key] = data;
+function logToCache(data) {
     let cache = CacheService.getScriptCache();
-    let value = (cache.get(key) || '').toString() + data;
+    let value = (cache.get(CACHE_KEY) || '').toString() + data;
     value = value.slice(-CACHE_SIZE)
-    cache.put(key, value);
+    cache.put(CACHE_KEY, value);
 }
-process.stderr = concat({ encoding: 'string' }, (data) => flush('_stderr', data));
-process.stdout = concat({ encoding: 'string' }, (data) => flush('_stdout', data));
+
+class Log extends Writable {
+    _write(chunk, encoding, next) {
+        process._log += chunk;
+        next();
+    }
+}
+
+let opts = {
+    decodeStrings: false
+}
+
+process._log = '';
+process.stderr = new Log(opts);
+process.stdout = new Log(opts);
 
 process.exit = (code = 0) => {
     process.exitCode = code;
@@ -42,5 +55,6 @@ process.exit = (code = 0) => {
     }
     process.stdout.end();
     process.stderr.end();
+    logToCache(process._log);
 }
 export default process;

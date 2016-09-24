@@ -1,6 +1,6 @@
 {
   "name": "gas-from-scratch",
-  "version": "0.1.101",
+  "version": "0.1.112",
   "description": "Google Apps Script from scratch",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "babel-runtime": "^6.11.6",
-    "concat-stream": "^1.5.2",
     "transducers-js": "^0.4.174"
   }
 }
