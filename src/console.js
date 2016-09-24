@@ -10,11 +10,11 @@ export class Console {
     _format(type, args, asString = false) {
         let data = {
             type,
-            date: Date.now(),
+            date: new Date(),
             message: format(...args),
         }
 
-        return asString ? `${data.date}\t[${data.type}]\t${data.message}\n` : data;
+        return asString ? `[${data.date.toISOString()}]\t${data.type}:\t${data.message}\n` : data;
     }
 
     _write(type, args, stream = this._stdout) {
@@ -22,7 +22,7 @@ export class Console {
     }
 
     log(...args) {
-        this._write('log', args);
+        this._write('info', args);
     }
 
     info(...args) {
