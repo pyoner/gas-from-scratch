@@ -11,7 +11,7 @@ export class Console {
         let data = {
             type,
             date: Date.now(),
-            message: asString ? format(...args) : args
+            message: format(...args),
         }
 
         return asString ? `${data.date}\t[${data.type}]\t${data.message}\n` : data;
