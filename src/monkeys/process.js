@@ -25,8 +25,17 @@ const CACHE_KEY = '_log';
 const CACHE_SIZE = 100 * 1024;
 const CACHE_EXP = 21600;
 
+let cache = CacheService.getScriptCache();
+let log = '';
+
+export function getLog(fromCache = false) {
+    if (fromCache) {
+        return cache.get(CACHE_KEY);
+    }
+    return log;
+}
+
 function logToCache(data) {
-    let cache = CacheService.getScriptCache();
     let lock = LockService.getScriptLock();
     if (lock.tryLock(1000)) {
         try {
@@ -41,7 +50,7 @@ function logToCache(data) {
 
 class Log extends Writable {
     _write(chunk, encoding, next) {
-        process._log += chunk;
+        log += chunk;
         next();
     }
 }
@@ -50,7 +59,6 @@ let opts = {
     decodeStrings: false
 }
 
-process._log = '';
 process.stderr = new Log(opts);
 process.stdout = new Log(opts);
 
@@ -63,6 +71,6 @@ process.exit = (code = 0) => {
     }
     process.stdout.end();
     process.stderr.end();
-    logToCache(process._log);
+    logToCache(log);
 }
 export default process;

@@ -1,4 +1,4 @@
-import process from '../monkeys/process'; // monkey patch for process events
+import process, { getLog } from '../monkeys/process'; // monkey patch for process events
 import console from '../console';
 import { isFunction, isNullOrUndefined } from 'util';
 
@@ -35,10 +35,6 @@ function logUncaughtException(err) {
     }
 }
 
-function getLog() {
-    return ContentService.createTextOutput(process._log);
-}
-
 function valueOf(obj) {
     return isFunction(obj.valueOf) ? obj.valueOf() : obj;
 }
@@ -64,7 +60,7 @@ export function schedulerMiddleware(type) {
                     logUncaughtException(err);
                 }
             }
-            return isNullOrUndefined(result) || isUncaughtException ? getLog() : valueOf(result);
+            return isNullOrUndefined(result) || isUncaughtException ? ContentService.createTextOutput(getLog()) : valueOf(result);
         }
     }
 }
