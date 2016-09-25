@@ -1,7 +1,7 @@
 import { schedulerMiddleware } from './middlewares/scheduler';
 import promiseMiddleware from './middlewares/promise';
 import { triggerMiddleware } from './middlewares/triggers';
-import testMiddleware from './middlewares/test';
+import { webActionMiddleware, testAction, logAction } from './middlewares/webActions';
 
 import { initApp } from './core';
 import * as test from '../tests';
@@ -11,6 +11,9 @@ let middlewares = [
     schedulerMiddleware,
     promiseMiddleware,
     triggerMiddleware,
-    testMiddleware(test),
+    webActionMiddleware('action', {
+        test: testAction(test),
+        log: logAction,
+    }),
 ];
 initApp(app, middlewares, global);
