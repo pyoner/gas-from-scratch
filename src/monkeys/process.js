@@ -30,7 +30,7 @@ let log = '';
 
 export function getLog(fromCache = false) {
     if (fromCache) {
-        return cache.get(CACHE_KEY);
+        return cache.get(CACHE_KEY) || '';
     }
     return log;
 }
@@ -39,7 +39,7 @@ function logToCache(data) {
     let lock = LockService.getScriptLock();
     if (lock.tryLock(1000)) {
         try {
-            let value = (cache.get(CACHE_KEY) || '').toString() + data;
+            let value = (cache.get(CACHE_KEY) || '') + data;
             value = value.slice(-CACHE_SIZE)
             cache.put(CACHE_KEY, value, CACHE_EXP);
         } finally {
