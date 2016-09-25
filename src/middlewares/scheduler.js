@@ -35,7 +35,7 @@ function logUncaughtException(err) {
     }
 }
 
-function returnLog() {
+function getLog() {
     return ContentService.createTextOutput(process._log);
 }
 
@@ -64,7 +64,7 @@ export function schedulerMiddleware(type) {
                     logUncaughtException(err);
                 }
             }
-            return isNullOrUndefined(result) || isUncaughtException ? returnLog() : valueOf(result);
+            return isNullOrUndefined(result) || isUncaughtException ? getLog() : valueOf(result);
         }
     }
 }
