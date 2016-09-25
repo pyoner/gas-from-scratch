@@ -23,12 +23,13 @@ for (let i = 0; i < funcs.length; i++) {
 // stdout/stderr
 const CACHE_KEY = '_log';
 const CACHE_SIZE = 100 * 1024;
+const CACHE_EXP = 21600;
 
 function logToCache(data) {
     let cache = CacheService.getScriptCache();
     let value = (cache.get(CACHE_KEY) || '').toString() + data;
     value = value.slice(-CACHE_SIZE)
-    cache.put(CACHE_KEY, value);
+    cache.put(CACHE_KEY, value, CACHE_EXP);
 }
 
 class Log extends Writable {
