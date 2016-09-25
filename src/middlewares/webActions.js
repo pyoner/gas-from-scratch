@@ -1,3 +1,5 @@
+import { getLog } from '../monkeys/process';
+
 const WEB_TYPES = ['doGet', 'doPost'];
 
 export function webActionMiddleware(name, actions) {
@@ -29,5 +31,5 @@ export function testAction(test) {
 }
 
 export function logAction(event) {
-    return ContentService.createTextOutput('logAction');
+    return ContentService.createTextOutput(getLog(true));
 }
