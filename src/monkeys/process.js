@@ -27,9 +27,16 @@ const CACHE_EXP = 21600;
 
 function logToCache(data) {
     let cache = CacheService.getScriptCache();
-    let value = (cache.get(CACHE_KEY) || '').toString() + data;
-    value = value.slice(-CACHE_SIZE)
-    cache.put(CACHE_KEY, value, CACHE_EXP);
+    let lock = LockService.getScriptLock();
+    if (lock.tryLock(1000)) {
+        try {
+            let value = (cache.get(CACHE_KEY) || '').toString() + data;
+            value = value.slice(-CACHE_SIZE)
+            cache.put(CACHE_KEY, value, CACHE_EXP);
+        } finally {
+            lock.releaseLock();
+        }
+    }
 }
 
 class Log extends Writable {
