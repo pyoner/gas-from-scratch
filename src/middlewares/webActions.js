@@ -30,12 +30,6 @@ export function testAction(test) {
     }
 }
 
-export function logAction(whitelist = []) {
-    return (event) => {
-        let email = Session.getActiveUser().getEmail();
-        if (whitelist.indexOf(email) == -1) {
-            return ContentService.createTextOutput('Access denied');
-        }
-        return ContentService.createTextOutput(getLog(true));
-    }
+export function logAction(event) {
+    return ContentService.createTextOutput(getLog(true));
 }
