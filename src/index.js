@@ -13,7 +13,7 @@ let middlewares = [
     triggerMiddleware,
     webActionMiddleware('action', {
         test: testAction(test),
-        log: logAction,
+        log: logAction(['devex.soft@gmail.com']),
     }),
 ];
 initApp(app, middlewares, global);
