@@ -5,7 +5,7 @@ const WEB_TYPES = ['doGet', 'doPost'];
 export function webActionMiddleware(name, actions) {
     return (type) => {
         if (WEB_TYPES.indexOf(type) === -1) {
-            return (next) => (event) => next(event);
+            return false;
         }
         return (next) => (event) => {
             let key = event.parameter[name];
