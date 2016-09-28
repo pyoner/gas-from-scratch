@@ -4,7 +4,7 @@
   "description": "Google Apps Script from scratch",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tape tests/local/**/*.js",
     "build": "webpack --config=webpack.config.js",
     "dist": "NODE_ENV=production webpack --config=webpack.config.js",
     "deploy": "gapps upload"
