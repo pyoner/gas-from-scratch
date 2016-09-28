@@ -5,7 +5,7 @@ import { webActionMiddleware, testAction, logAction } from './middlewares/webAct
 
 import { initApp } from './core';
 import { webAccessWrapper } from './helpers';
-import * as test from '../tests';
+import * as test from '../tests/server';
 import * as app from './app';
 
 let access = webAccessWrapper({ whitelist: ['devex.soft@gmail.com'] });
