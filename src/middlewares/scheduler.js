@@ -1,20 +1,7 @@
+import { isFunction, isNullOrUndefined } from 'util';
+import scheduler from '../scheduler';
 import process, { getLog } from '../monkeys/process'; // monkey patch for process events
 import console from '../console';
-import { isFunction, isNullOrUndefined } from 'util';
-
-Object.assign(global, { setTimeout, clearTimeout });
-let items = [];
-
-function scheduler() {
-    while (items.length) {
-        let [id, time, cb, args] = items.shift();
-        let delta = time - Date.now();
-        if (delta > 0) {
-            Utilities.sleep(delta);
-        }
-        cb(...args);
-    }
-}
 
 let isUncaughtException = false;
 
@@ -50,7 +37,7 @@ export function schedulerMiddleware(type) {
             if (!isUncaughtException) {
                 try {
                     let runned = false;
-                    while (!runned || items.length) {
+                    while (!runned || !scheduler.isEmpty()) {
                         runned = true;
                         scheduler();
                         process.emit('beforeExit');
@@ -61,33 +48,6 @@ export function schedulerMiddleware(type) {
                 }
             }
             return isNullOrUndefined(result) || isUncaughtException ? ContentService.createTextOutput(getLog()) : valueOf(result);
-        }
-    }
-}
-
-export function setTimeout(cb, ms, ...args) {
-    let id = parseInt(Math.random().toString().slice(2));
-    let t = Date.now() + ms;
-    let item = [id, t, cb, args];
-
-    for (let i = 0; i < items.length; i++) {
-        let time = items[i][1];
-        if (t < time) {
-            items.splice(i, 0, item);
-            return id;
-        }
-    }
-
-    items.push(item);
-    return id;
-}
-
-export function clearTimeout(id) {
-    for (let i = 0; i < items.length; i++) {
-        let itemId = items[i][0];
-        if (itemId == id) {
-            items.splice(i, 1);
-            break;
         }
     }
 }
