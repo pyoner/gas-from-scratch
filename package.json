@@ -4,7 +4,7 @@
   "description": "Google Apps Script from scratch",
   "main": "index.js",
   "scripts": {
-    "test": "tape -r babel-register tests/local/**/*.js",
+    "test": "BABEL_CACHE_PATH=.cache/babel.json tape -r babel-register tests/local/**/*.js",
     "build": "webpack --config=webpack.config.js",
     "dist": "NODE_ENV=production webpack --config=webpack.config.js",
     "deploy": "gapps upload"
