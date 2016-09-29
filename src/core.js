@@ -1,4 +1,4 @@
-import { comp, identity, into, map, filter } from 'transducers-js';
+import { comp, into, map, filter } from 'transducers-js';
 
 export const TRIGGER_TYPES = [
     'onOpen',
@@ -7,10 +7,6 @@ export const TRIGGER_TYPES = [
     'doGet',
     'doPost',
 ]
-
-function identityMiddleware() {
-    return identity;
-}
 
 function initMiddlewares(type, middlewares) {
     let xf = comp(filter(Boolean), map((m) => m(type)));
