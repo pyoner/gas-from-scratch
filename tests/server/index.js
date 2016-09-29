@@ -1,8 +1,7 @@
+import { getLog } from '../../src/monkeys/process';
 import test from 'tape';
 
 export function doGet(event) {
-    console.log('Test');
-
     test('test 1', (t) => {
         t.equal(1, 1);
         t.end();
@@ -18,5 +17,9 @@ export function doGet(event) {
             t.equal(3, 3);
             t.end();
         });
-    })
+    });
+
+    return new Promise((resolve, reject) => {
+        test.onFinish(() => resolve(ContentService.createTextOutput(getLog())))
+    });
 }

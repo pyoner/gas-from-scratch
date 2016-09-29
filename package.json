@@ -1,6 +1,6 @@
 {
   "name": "gas-from-scratch",
-  "version": "0.1.130",
+  "version": "0.1.138",
   "description": "Google Apps Script from scratch",
   "main": "index.js",
   "scripts": {

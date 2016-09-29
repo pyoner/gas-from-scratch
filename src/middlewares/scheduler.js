@@ -1,4 +1,4 @@
-import { isFunction, isNullOrUndefined } from 'util';
+import { isFunction } from 'util';
 import scheduler from '../scheduler';
 import process, { getLog } from '../monkeys/process'; // monkey patch for process events
 import console from '../console';
@@ -23,7 +23,7 @@ function logUncaughtException(err) {
 }
 
 function valueOf(obj) {
-    return isFunction(obj.valueOf) ? obj.valueOf() : obj;
+    return obj && isFunction(obj.valueOf) ? obj.valueOf() : obj;
 }
 
 export function schedulerMiddleware(type) {
@@ -47,7 +47,7 @@ export function schedulerMiddleware(type) {
                     logUncaughtException(err);
                 }
             }
-            return isNullOrUndefined(result) || isUncaughtException ? ContentService.createTextOutput(getLog()) : valueOf(result);
+            return isUncaughtException ? ContentService.createTextOutput(getLog()) : valueOf(result);
         }
     }
 }
