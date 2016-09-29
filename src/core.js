@@ -18,7 +18,7 @@ export function initApp(app, middlewares = [], g = global) {
         let obj = app[name];
         if (TRIGGER_TYPES.indexOf(name) != -1) {
             let m = initMiddlewares(name, middlewares);
-            g[name] = comp(...m)(obj);
+            g[name] = !m.length ? obj : (m.length == 1 ? m[0](obj) : comp(...m)(obj));
         } else {
             g[name] = obj;
         }
