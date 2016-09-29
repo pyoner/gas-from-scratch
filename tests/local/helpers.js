@@ -16,6 +16,12 @@ test('webAccessWrapper', (t) => {
         }
     }
 
+    global.ContentService = {
+        createTextOutput(text) {
+            return text;
+        }
+    }
+
     t.test('test password', (t) => {
         let password = '123';
         let testPassword = webAccessWrapper({ password })(success, failure);
@@ -44,6 +50,17 @@ test('webAccessWrapper', (t) => {
 
         let result = testWhitelist({ parameter: {} });
         t.equal(result, false);
+
+        t.end();
+    });
+
+    t.test('test denyMessage', (t) => {
+        let whitelist = ['failure@mail.com'];
+        let denyMessage = 'Access denied';
+        let testDenyMessage = webAccessWrapper({ whitelist, denyMessage })(success);
+
+        let result = testDenyMessage({ parameter: {} });
+        t.equal(result, denyMessage);
 
         t.end();
     });
