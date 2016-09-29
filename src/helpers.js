@@ -9,12 +9,13 @@ function checkWhitelist(whitelist) {
     return isArray(whitelist) && (whitelist.indexOf(email) !== -1)
 }
 
-export function webAccessWrapper({ whitelist, password }) {
-    return (func) => (...args) => {
+export function webAccessWrapper({ whitelist, password, denyMessage = 'Access denied' }) {
+    let deny = () => ContentService.createTextOutput(denyMessage);
+    return (success, failure = deny) => (...args) => {
         let pass = args[0].parameter.password;
-        if (checkPassword(password, pass) || checkWhitelist(whitelist)){
-            return func(...args);
+        if (checkPassword(password, pass) || checkWhitelist(whitelist)) {
+            return success(...args);
         }
-        return ContentService.createTextOutput('Access denied');
+        return failure(...args);
     }
 }
