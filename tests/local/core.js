@@ -19,4 +19,13 @@ test('core initApp', (t) => {
         t.deepEqual(Object.keys(context), Object.keys(app));
         t.end();
     });
+
+    t.test('test with 1 middleware', (t) => {
+        let context = {};
+        let middleware = (type) => (next) => (event) => 1 + next(event);
+        initApp(app, [middleware], context);
+
+        t.equal(context.doGet(1), 2);
+        t.end();
+    });
 });
