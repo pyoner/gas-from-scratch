@@ -64,4 +64,19 @@ test('webAccessWrapper', (t) => {
 
         t.end();
     });
+    t.test('test pass args to success, failure callbacks', (t) => {
+        let password = '123';
+        let argsFunc = (...args) => args;
+        let testPassArgs = webAccessWrapper({ password })(argsFunc, argsFunc);
+
+        let successArgs = [{ parameter: { password } }];
+        let result = testPassArgs(...successArgs);
+        t.deepLooseEqual(result, successArgs);
+
+        let failureArgs = [{ parameter: { password: 'bad pass' } }];
+        result = testPassArgs(...failureArgs);
+        t.deepLooseEqual(result, failureArgs);
+
+        t.end();
+    });
 });
