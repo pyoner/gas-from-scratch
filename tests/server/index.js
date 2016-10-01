@@ -1,4 +1,4 @@
-import { getLog } from '../../src/monkeys/process';
+import { getLog } from 'gas-core';
 import test from 'tape';
 
 export function doGet(event) {
