@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var RemoveWebpackPlugin = require('remove-webpack-plugin');
 var Bump = require("bump-webpack-plugin");
 var PathChunkPlugin = require('path-chunk-webpack-plugin');
+var ClosureCompiler = require('google-closure-compiler-js').webpack;
 
 
 var SRC_DIR = path.join(__dirname, 'src');
@@ -68,11 +69,23 @@ if (process.env.NODE_ENV == 'production') {
         new webpack.DefinePlugin({
             'process.env': { 'NODE_ENV': JSON.stringify('production') }
         }),
-        new webpack.optimize.UglifyJsPlugin({ compress: { warnings: true } })
+        new ClosureCompiler({
+            options: {
+                languageOut: 'ECMASCRIPT3',
+                warningLevel: 'QUIET',
+                compilationLevel: 'SIMPLE',
+            }
+        })
     ])
 } else {
     config.plugins = config.plugins.concat([
-        new webpack.optimize.UglifyJsPlugin({ beautify: true })
+        new ClosureCompiler({
+            options: {
+                languageOut: 'ECMASCRIPT3',
+                warningLevel: 'QUIET',
+                compilationLevel: 'WHITESPACE_ONLY',
+            }
+        })
     ])
 }
 
