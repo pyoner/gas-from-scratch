@@ -35,7 +35,6 @@ var config = {
                 include: [SRC_DIR, TEST_DIR],
                 query: {
                     presets: [
-                        'es3',
                         'es2015',
                         'stage-1',
                     ],
