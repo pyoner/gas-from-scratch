@@ -41,6 +41,8 @@ var config = {
                     plugins: [
                         'transform-runtime',
                         'closure-elimination',
+                        'transform-es3-property-literals',
+                        'transform-es3-member-expression-literals',
                     ]
                 }
             }
